@@ -1,7 +1,11 @@
 import requests
+import os
 
-OUTPUT_PNG = "gh-pages/radar.png"
-OUTPUT_KML = "gh-pages/radar.kml"
+OUTPUT_DIR = "site"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+OUTPUT_PNG = f"{OUTPUT_DIR}/radar.png"
+OUTPUT_KML = f"{OUTPUT_DIR}/radar.kml"
 
 # WMS GetMap request
 url = (
