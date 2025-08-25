@@ -4,7 +4,8 @@ on:
   schedule:
     - cron: "*/15 * * * *"   # every 30 minutes
   workflow_dispatch:          # allow manual trigger
-
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
