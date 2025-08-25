@@ -1,7 +1,7 @@
 import requests
 
-OUTPUT_PNG = "radar.png"
-OUTPUT_KML = "radar.kml"
+OUTPUT_PNG = "gh-pages/radar.png"
+OUTPUT_KML = "gh-pages/radar.kml"
 
 # WMS GetMap request
 url = (
