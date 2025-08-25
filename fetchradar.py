@@ -32,4 +32,45 @@ getmap_url = (
 
 # Step 3: Fetch PNG
 resp = requests.get(getmap_url)
-with open(OU
+with open(OUTPUT_PNG, "wb") as f:
+    f.write(resp.content)
+
+# Step 4: Apply transparency filtering
+img = Image.open(OUTPUT_PNG).convert("RGBA")
+filtered = []
+for r,g,b,a in img.getdata():
+    # black frame (~14 ±5)
+    if 9 <= r <= 19 and 9 <= g <= 19 and 9 <= b <= 19:
+        filtered.append((r,g,b,0))
+    # off-white background (>=230)
+    elif r >= 230 and g >= 230 and b >= 230:
+        filtered.append((r,g,b,0))
+    else:
+        filtered.append((r,g,b,a))
+img.putdata(filtered)
+img.save(OUTPUT_PNG)
+
+print("✅ Saved transparent radar overlay using timestamp:", latest_time)
+
+# Step 5: Write KML GroundOverlay
+kml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Radar Overlay</name>
+    <GroundOverlay>
+      <name>Radar {latest_time}</name>
+      <Icon>
+        <href>radar.png</href>
+      </Icon>
+      <LatLonBox>
+        <north>60</north>
+        <south>20</south>
+        <east>-60</east>
+        <west>-130</west>
+      </LatLonBox>
+    </GroundOverlay>
+  </Document>
+</kml>"""
+
+with open(OUTPUT_KML, "w") as f:
+    f.write(kml)
