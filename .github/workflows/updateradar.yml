@@ -1,0 +1,46 @@
+name: Update Radar Overlay
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # every 30 minutes
+  workflow_dispatch:          # allow manual trigger
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pillow requests
+        
+      - name: Install deps
+        run: pip install requests
+
+      - name: Generate radar overlay
+        run: |
+          mkdir -p site
+          python fetchradar.py
+      - name: Deploy to gh-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin gh-pages || true
+          git checkout gh-pages || git checkout --orphan gh-pages
+
+          # copy over new outputs
+          cp -r site/* ./
+
+          git add radar.kml radar.png
+          git commit -m "Update radar overlay $(date -u +'%Y-%m-%dT%H:%M:%SZ')" || echo "No changes to commit"
+          git push origin gh-pages --force

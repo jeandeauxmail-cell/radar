@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Radar Overlay</name>
+    <GroundOverlay>
+      <name>Radar 2025-08-25T19:28:12.000Z</name>
+      <Icon>
+        <href>radar.png</href>
+      </Icon>
+      <LatLonBox>
+        <north>60</north>
+        <south>20</south>
+        <east>-60</east>
+        <west>-130</west>
+      </LatLonBox>
+    </GroundOverlay>
+  </Document>
+</kml>
